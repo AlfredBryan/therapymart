@@ -1,49 +1,105 @@
 import React from 'react';
+import { Image, View } from 'react-native';
 import {
-  Container, Content, Text, H1, H2, H3,
+  Container,
+  Content,
+  Text,
+  H1,
+  H3,
+  Form,
+  Input,
+  Button,
+  Card,
 } from 'native-base';
+import PropTypes from 'prop-types';
 import Spacer from './UI/Spacer';
 
-const About = () => (
-  <Container>
-    <Content padder>
-      <Spacer size={30} />
-      <H1>
-        Heading 1
-      </H1>
-      <Spacer size={10} />
-      <Text>
-        Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo,
-        tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem
-        malesuada magna mollis euismod. Donec sed odio dui.
-        {' '}
-      </Text>
+class About extends React.Component {
+  static propTypes = {
+    loading: PropTypes.bool.isRequired,
+  };
 
-      <Spacer size={30} />
-      <H2>
-        Heading 2
-      </H2>
-      <Spacer size={10} />
-      <Text>
-        Elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
-        mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
-        magna mollis euismod. Donec sed odio dui.
-        {' '}
-      </Text>
+  constructor(props) {
+    super(props);
+    this.state = {
+      search: '',
+    };
+  }
 
-      <Spacer size={30} />
-      <H3>
-        Heading 3
-      </H3>
-      <Spacer size={10} />
-      <Text>
-        Elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor
-        mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
-        magna mollis euismod. Donec sed odio dui.
-        {' '}
-      </Text>
-    </Content>
-  </Container>
-);
+  render() {
+    const { loading } = this.props;
+    const { search } = this.state;
+    return (
+      <Container>
+        <Content padder>
+          <Spacer size={30} />
+          <Image
+            style={{ width: '100%', height: 200, margin: '0%' }}
+            source={{
+              uri:
+                'https://res.cloudinary.com/ephaig/image/upload/v1555447750/container.png',
+            }}
+          />
+          <Text
+            style={{
+              position: 'absolute',
+              top: '23%',
+              width: '20%',
+              left: '20%',
+              height: '15%',
+              backgroundColor: 'rgba(1, 173, 186, 0.5)',
+            }}
+          />
+          <H1
+            style={{
+              position: 'absolute',
+              top: '25%',
+              left: '20%',
+              fontWeight: '700',
+              color: 'white',
+            }}
+          >
+            {' '}
+            Find the Right
+            {'\n'}
+            Therapist for You
+          </H1>
+          <Spacer size={10} />
+          <Text>
+            Search from over 250 professional therapists in over 40 countries
+            around the word
+          </Text>
+
+          <Spacer size={30} />
+          <Spacer size={10} />
+          <Form>
+            <Input
+              autoCapitalize="none"
+              value={search}
+              keyboardType="email-address"
+              disabled={loading}
+              onChangeText={v => this.handleChange('search', v)}
+              style={{
+                width: '100%',
+                backgroundColor: '#FFFFFF',
+                borderColor: '1px solid #BDBDBD',
+              }}
+            />
+            <Button
+              style={{ backgroundColor: '#01ADBA' }}
+              block
+              onPress={this.handleSubmit}
+              disabled={loading}
+            >
+              <Text>{loading ? 'Loading' : 'Search'}</Text>
+            </Button>
+          </Form>
+
+          <Spacer size={30} />
+        </Content>
+      </Container>
+    );
+  }
+}
 
 export default About;

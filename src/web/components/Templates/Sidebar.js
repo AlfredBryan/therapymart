@@ -32,7 +32,7 @@ Template.propTypes = {
 };
 
 Template.defaultProps = {
-  pageTitle: 'React App',
+  pageTitle: 'TherapyMart',
 };
 
 export default Template;

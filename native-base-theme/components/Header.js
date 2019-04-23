@@ -10,7 +10,7 @@ export default (variables = variable) => {
     ".span": {
       height: 128,
       "NativeBase.Left": {
-        alignSelf: "flex-start"
+        alignSelf: 'flex-start',
       },
       "NativeBase.Body": {
         alignSelf: "flex-end",

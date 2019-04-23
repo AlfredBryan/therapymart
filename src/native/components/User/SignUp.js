@@ -1,7 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Container, Content, Text, Form, Item, Label, Input, Button,
+  Container,
+  Content,
+  Text,
+  Form,
+  Item,
+  Label,
+  Input,
+  Button,
 } from 'native-base';
 import { Actions } from 'react-native-router-flux';
 import Messages from '../UI/Messages';
@@ -14,20 +21,22 @@ class SignUp extends React.Component {
     error: PropTypes.string,
     loading: PropTypes.bool.isRequired,
     onFormSubmit: PropTypes.func.isRequired,
-  }
+  };
 
   static defaultProps = {
     error: null,
     success: null,
-  }
+  };
 
   state = {
-    firstName: '',
-    lastName: '',
+    first_name: '',
+    last_name: '',
     email: '',
+    designation: '',
     password: '',
-    password2: '',
-  }
+    image: '',
+    age: '',
+  };
 
   constructor(props) {
     super(props);
@@ -36,14 +45,19 @@ class SignUp extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange = (name, val) => this.setState({ [name]: val })
+  handleChange = (name, val) => this.setState({ [name]: val });
 
   handleSubmit = () => {
     const { onFormSubmit } = this.props;
     onFormSubmit(this.state)
-      .then(() => setTimeout(() => { Actions.pop(); Actions.login(); }, 1000))
+      .then(() =>
+        setTimeout(() => {
+          Actions.pop();
+          Actions.login();
+        }, 1000)
+      )
       .catch(() => {});
-  }
+  };
 
   render() {
     const { loading, error, success } = this.props;
@@ -64,7 +78,7 @@ class SignUp extends React.Component {
               <Label>First Name</Label>
               <Input
                 disabled={loading}
-                onChangeText={v => this.handleChange('firstName', v)}
+                onChangeText={v => this.handleChange('first_name', v)}
               />
             </Item>
 
@@ -72,7 +86,7 @@ class SignUp extends React.Component {
               <Label>Last Name</Label>
               <Input
                 disabled={loading}
-                onChangeText={v => this.handleChange('lastName', v)}
+                onChangeText={v => this.handleChange('last_name', v)}
               />
             </Item>
 

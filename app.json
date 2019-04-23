@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "React Native Starter Kit",
-    "description": "This is a boilerplate that launches with a React web app and React Native mobile app. It shares a single code base! The 'business logic' (i.e. actions, containers, reducers) is shared across both platforms, whilst allowing flexibility in View components to ensure your project looks and feels native in each platform. - https://github.com/mcnamee/react-native-starter-kit",
-    "slug": "react-native-starter-kit",
+    "name": "TherapyMart",
+    "description": "This is a Therapy App to connect Therapist and patient",
+    "slug": "TherapyMart",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -15,7 +15,7 @@
     "splash": {
       "image": "./src/images/launch.png",
       "resizeMode": "contain",
-      "backgroundColor": "#473be7"
+      "backgroundColor": "#01ADBA"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
