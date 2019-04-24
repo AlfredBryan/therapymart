@@ -85,7 +85,7 @@ class Login extends React.Component {
             <Spacer size={20} />
 
             <View padder>
-              <Button block onPress={this.handleSubmit} disabled={loading}>
+              <Button style={{ backgroundColor: '#01ADBA' }} block onPress={this.handleSubmit} disabled={loading}>
                 <Text>{loading ? 'Loading' : 'Login' }</Text>
               </Button>
             </View>

@@ -1,5 +1,7 @@
 import React from 'react';
+import axios from 'axios';
 import PropTypes from 'prop-types';
+import { ScrollView } from 'react-native';
 import {
   Container,
   Content,
@@ -9,8 +11,8 @@ import {
   Label,
   Input,
   Button,
+  Picker,
 } from 'native-base';
-import { Actions } from 'react-native-router-flux';
 import Messages from '../UI/Messages';
 import Header from '../UI/Header';
 import Spacer from '../UI/Spacer';
@@ -20,7 +22,6 @@ class SignUp extends React.Component {
     success: PropTypes.string,
     error: PropTypes.string,
     loading: PropTypes.bool.isRequired,
-    onFormSubmit: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -48,22 +49,26 @@ class SignUp extends React.Component {
   handleChange = (name, val) => this.setState({ [name]: val });
 
   handleSubmit = () => {
-    const { onFormSubmit } = this.props;
-    onFormSubmit(this.state)
-      .then(() =>
-        setTimeout(() => {
-          Actions.pop();
-          Actions.login();
-        }, 1000)
-      )
-      .catch(() => {});
+    const { first_name, last_name, email, designation, password } = this.state;
+    axios
+      .post('https://hng5-whisper.herokuapp.com/api/v1/auth/signup', {
+        first_name,
+        last_name,
+        email,
+        password,
+        designation,
+      })
+      .then(res => {
+        res.data;
+      });
   };
 
   render() {
     const { loading, error, success } = this.props;
+    const { first_name, last_name, email, designation, password } = this.state;
 
     return (
-      <Container>
+      <ScrollView>
         <Content padder>
           <Header
             title="Welcome"
@@ -78,6 +83,7 @@ class SignUp extends React.Component {
               <Label>First Name</Label>
               <Input
                 disabled={loading}
+                value={first_name}
                 onChangeText={v => this.handleChange('first_name', v)}
               />
             </Item>
@@ -86,6 +92,7 @@ class SignUp extends React.Component {
               <Label>Last Name</Label>
               <Input
                 disabled={loading}
+                value={last_name}
                 onChangeText={v => this.handleChange('last_name', v)}
               />
             </Item>
@@ -95,6 +102,7 @@ class SignUp extends React.Component {
               <Input
                 disabled={loading}
                 autoCapitalize="none"
+                value={email}
                 keyboardType="email-address"
                 onChangeText={v => this.handleChange('email', v)}
               />
@@ -104,28 +112,41 @@ class SignUp extends React.Component {
               <Label>Password</Label>
               <Input
                 disabled={loading}
+                value={password}
                 secureTextEntry
                 onChangeText={v => this.handleChange('password', v)}
               />
             </Item>
 
             <Item stackedLabel>
-              <Label>Confirm Password</Label>
-              <Input
+              <Label>Choose Designation</Label>
+              <Picker
+                selectedValue={designation}
+                style={{ height: 50, width: 100 }}
                 disabled={loading}
-                secureTextEntry
-                onChangeText={v => this.handleChange('password2', v)}
-              />
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({ designation: itemValue })
+                }
+              >
+                <Picker.Item label="Normal" value="normal" />
+                <Picker.Item label="Admin" value="admin" />
+                <Picker.Item label="Therapist" value="therapist" />
+              </Picker>
             </Item>
 
             <Spacer size={20} />
 
-            <Button block onPress={this.handleSubmit} disabled={loading}>
+            <Button
+              style={{ backgroundColor: '#01ADBA' }}
+              block
+              onPress={this.handleSubmit}
+              disabled={loading}
+            >
               <Text>{loading ? 'Loading' : 'Sign Up'}</Text>
             </Button>
           </Form>
         </Content>
-      </Container>
+      </ScrollView>
     );
   }
 }

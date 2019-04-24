@@ -43,10 +43,10 @@ class About extends React.Component {
           <Text
             style={{
               position: 'absolute',
-              top: '23%',
+              top: '32%',
               width: '20%',
-              left: '20%',
-              height: '15%',
+              left: '10%',
+              height: '25%',
               backgroundColor: 'rgba(1, 173, 186, 0.5)',
             }}
           />
@@ -54,7 +54,7 @@ class About extends React.Component {
             style={{
               position: 'absolute',
               top: '25%',
-              left: '20%',
+              left: '15%',
               fontWeight: '700',
               color: 'white',
             }}
@@ -65,9 +65,17 @@ class About extends React.Component {
             Therapist for You
           </H1>
           <Spacer size={10} />
-          <Text>
-            Search from over 250 professional therapists in over 40 countries
-            around the word
+          <Text
+            style={{
+              position: 'absolute',
+              top: '40%',
+              left: '15%',
+              fontWeight: '700',
+              color: 'white',
+            }}
+          >
+            Search from over 250 professional {'\n'} therapists in over 40
+            countries {'\n'} around the word
           </Text>
 
           <Spacer size={30} />

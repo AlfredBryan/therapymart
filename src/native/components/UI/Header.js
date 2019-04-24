@@ -7,7 +7,7 @@ import Spacer from './Spacer';
 const Header = ({ title, content }) => (
   <View>
     <Spacer size={25} />
-    <H1>{title}</H1>
+    <H1 style={{ fontWeight: '900' }}>{title}</H1>
     {!!content && (
       <View>
         <Spacer size={10} />
