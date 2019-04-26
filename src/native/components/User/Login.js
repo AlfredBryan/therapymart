@@ -1,34 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { AsyncStorage } from 'react-native';
 import {
-  Container, Content, Form, Item, Label, Input, Text, Button, View,
+  Container,
+  Content,
+  Form,
+  Item,
+  Label,
+  Input,
+  Text,
+  Button,
+  View,
 } from 'native-base';
-import { Actions } from 'react-native-router-flux';
 import Messages from '../UI/Messages';
 import Header from '../UI/Header';
 import Spacer from '../UI/Spacer';
 
 class Login extends React.Component {
   static propTypes = {
-    member: PropTypes.shape({
-      email: PropTypes.string,
-    }),
     error: PropTypes.string,
     success: PropTypes.string,
-    loading: PropTypes.bool.isRequired,
-    onFormSubmit: PropTypes.func.isRequired,
-  }
+  };
 
   static defaultProps = {
     error: null,
     success: null,
-    member: {},
-  }
+  };
 
   constructor(props) {
     super(props);
     this.state = {
-      email: (props.member && props.member.email) ? props.member.email : '',
+      email: '',
       password: '',
     };
 
@@ -36,19 +38,36 @@ class Login extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange = (name, val) => this.setState({ [name]: val })
+  handleChange = (name, val) => this.setState({ [name]: val });
 
   handleSubmit = () => {
-    const { onFormSubmit } = this.props;
-
-    return onFormSubmit(this.state)
-      .then(() => setTimeout(() => Actions.pop(), 1000))
-      .catch(() => {});
-  }
+    const { email, password } = this.state;
+    fetch('https://hng5-whisper.herokuapp.com/api/v1/auth/signup', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        AsyncStorage.setItem('token', responseJson.data.token);
+        if (responseJson.status === 200) {
+          this.props.navigation.navigate('profile');
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
 
   render() {
-    const { loading, error, success } = this.props;
-    const { email } = this.state;
+    const { error, success } = this.props;
+    const { email, password } = this.state;
 
     return (
       <Container>
@@ -69,24 +88,27 @@ class Login extends React.Component {
                 autoCapitalize="none"
                 value={email}
                 keyboardType="email-address"
-                disabled={loading}
                 onChangeText={v => this.handleChange('email', v)}
               />
             </Item>
             <Item stackedLabel>
               <Label>Password</Label>
               <Input
+                value={password}
                 secureTextEntry
-                disabled={loading}
+                keyboardType="password"
                 onChangeText={v => this.handleChange('password', v)}
               />
             </Item>
 
             <Spacer size={20} />
-
             <View padder>
-              <Button style={{ backgroundColor: '#01ADBA' }} block onPress={this.handleSubmit} disabled={loading}>
-                <Text>{loading ? 'Loading' : 'Login' }</Text>
+              <Button
+                style={{ backgroundColor: '#01ADBA' }}
+                block
+                onPress={this.handleSubmit}
+              >
+                <Text>Login</Text>
               </Button>
             </View>
           </Form>

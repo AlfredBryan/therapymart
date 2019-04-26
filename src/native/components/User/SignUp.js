@@ -1,9 +1,7 @@
 import React from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
-import { ScrollView } from 'react-native';
+import { ScrollView, AsyncStorage } from 'react-native';
 import {
-  Container,
   Content,
   Text,
   Form,
@@ -21,7 +19,6 @@ class SignUp extends React.Component {
   static propTypes = {
     success: PropTypes.string,
     error: PropTypes.string,
-    loading: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -29,19 +26,17 @@ class SignUp extends React.Component {
     success: null,
   };
 
-  state = {
-    first_name: '',
-    last_name: '',
-    email: '',
-    designation: '',
-    password: '',
-    image: '',
-    age: '',
-  };
-
   constructor(props) {
     super(props);
-
+    this.state = {
+      first_name: '',
+      last_name: '',
+      email: '',
+      designation: '',
+      password: '',
+      image: '',
+      age: '',
+    };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -50,21 +45,33 @@ class SignUp extends React.Component {
 
   handleSubmit = () => {
     const { first_name, last_name, email, designation, password } = this.state;
-    axios
-      .post('https://hng5-whisper.herokuapp.com/api/v1/auth/signup', {
+    fetch('https://hng5-whisper.herokuapp.com/api/v1/auth/signup', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
         first_name,
         last_name,
         email,
-        password,
         designation,
+        password,
+      }),
+    })
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(responseJson);
+        AsyncStorage.setItem('token', responseJson.data.token);
+        console.log(responseJson.data.token);
       })
-      .then(res => {
-        res.data;
+      .catch(error => {
+        console.error(error);
       });
   };
 
   render() {
-    const { loading, error, success } = this.props;
+    const { error, success } = this.props;
     const { first_name, last_name, email, designation, password } = this.state;
 
     return (
@@ -82,7 +89,6 @@ class SignUp extends React.Component {
             <Item stackedLabel>
               <Label>First Name</Label>
               <Input
-                disabled={loading}
                 value={first_name}
                 onChangeText={v => this.handleChange('first_name', v)}
               />
@@ -91,7 +97,6 @@ class SignUp extends React.Component {
             <Item stackedLabel>
               <Label>Last Name</Label>
               <Input
-                disabled={loading}
                 value={last_name}
                 onChangeText={v => this.handleChange('last_name', v)}
               />
@@ -100,7 +105,6 @@ class SignUp extends React.Component {
             <Item stackedLabel>
               <Label>Email</Label>
               <Input
-                disabled={loading}
                 autoCapitalize="none"
                 value={email}
                 keyboardType="email-address"
@@ -111,7 +115,6 @@ class SignUp extends React.Component {
             <Item stackedLabel>
               <Label>Password</Label>
               <Input
-                disabled={loading}
                 value={password}
                 secureTextEntry
                 onChangeText={v => this.handleChange('password', v)}
@@ -123,11 +126,11 @@ class SignUp extends React.Component {
               <Picker
                 selectedValue={designation}
                 style={{ height: 50, width: 100 }}
-                disabled={loading}
                 onValueChange={(itemValue, itemIndex) =>
                   this.setState({ designation: itemValue })
                 }
               >
+                <Picker.Item disabled label="Select" value="none" />
                 <Picker.Item label="Normal" value="normal" />
                 <Picker.Item label="Admin" value="admin" />
                 <Picker.Item label="Therapist" value="therapist" />
@@ -140,9 +143,8 @@ class SignUp extends React.Component {
               style={{ backgroundColor: '#01ADBA' }}
               block
               onPress={this.handleSubmit}
-              disabled={loading}
             >
-              <Text>{loading ? 'Loading' : 'Sign Up'}</Text>
+              <Text>Sign Up</Text>
             </Button>
           </Form>
         </Content>
